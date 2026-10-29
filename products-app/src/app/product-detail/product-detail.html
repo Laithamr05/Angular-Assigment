@@ -1,0 +1,8 @@
+<div class="card">
+  <h3>{{ product().name }}</h3>
+  <p><b>Category:</b> {{ product().category }}</p>
+  <p><b>Price:</b> {{ product().price | currency }}</p>
+  <p><b>Created:</b> {{ product().createdAt | date: 'medium' }}</p>
+
+  <button class="delete-btn" (click)="delete.emit(product())">Delete</button>
+</div>

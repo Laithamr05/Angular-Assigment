@@ -1,0 +1,26 @@
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background-color: #2d3e50;
+  color: white;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+nav {
+  flex: 1;
+}
+
+nav a {
+  color: white;
+  margin-right: 15px;
+}
+
+main {
+  padding: 20px;
+}
