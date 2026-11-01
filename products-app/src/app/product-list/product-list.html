@@ -1,32 +1,44 @@
-<h2>Products</h2>
+<div class="top-bar">
+  <h2>Products</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Price</th>
-      <th>Created</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (product of productService.products(); track product.id) {
-      <tr>
-        <td>{{ product.name }}</td>
-        <td>{{ product.category }}</td>
-        <td>{{ product.price | currency }}</td>
-        <td>{{ product.createdAt | date: 'mediumDate' }}</td>
-        <td><button (click)="selectedProduct.set(product)">View</button></td>
-      </tr>
-    } @empty {
-      <tr>
-        <td colspan="5">No products found.</td>
-      </tr>
-    }
-  </tbody>
-</table>
+  <div>
+    <label>Filter by category: </label>
+    <kendo-dropdownlist
+      [data]="categoryOptions"
+      [(value)]="selectedCategory"
+      [style.width.px]="180"
+    ></kendo-dropdownlist>
+  </div>
+
+  <button kendoButton themeColor="primary" routerLink="/products/add">Add Product</button>
+</div>
+
+<kendo-grid [data]="productService.products() | filterByCategory: selectedCategory">
+  <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+  <kendo-grid-column field="category" title="Category"></kendo-grid-column>
+  <kendo-grid-column field="price" title="Price">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <span [appHighlightExpensive]="dataItem.price">{{ dataItem.price | currency }}</span>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="createdAt" title="Created">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.createdAt | date: 'mediumDate' }}
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column title="Actions" [width]="240">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button kendoButton (click)="selectedProduct.set(dataItem)">View</button>
+      <button kendoButton [routerLink]="['/products', dataItem.id]">Edit</button>
+      <button kendoButton themeColor="error" (click)="onDelete(dataItem)">Delete</button>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>
 
 @if (selectedProduct()) {
-  <app-product-detail [product]="selectedProduct()!" (delete)="onDelete($event)"></app-product-detail>
+  <app-product-detail
+    [product]="selectedProduct()!"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-product-detail>
 }

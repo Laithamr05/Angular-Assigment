@@ -1,0 +1,56 @@
+<h2>Add Product</h2>
+
+<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+  <div class="field">
+    <label>Name</label>
+    <kendo-textbox
+      name="name"
+      [(ngModel)]="product.name"
+      required
+      minlength="2"
+      #name="ngModel"
+    ></kendo-textbox>
+    @if (name.invalid && name.touched) {
+      <small class="error">Name is required (at least 2 characters)</small>
+    }
+  </div>
+
+  <div class="field">
+    <label>Price</label>
+    <kendo-numerictextbox
+      name="price"
+      [(ngModel)]="product.price"
+      [min]="0"
+      format="c2"
+      required
+      #price="ngModel"
+    ></kendo-numerictextbox>
+    @if (price.touched && product.price <= 0) {
+      <small class="error">Price must be more than 0</small>
+    }
+  </div>
+
+  <div class="field">
+    <label>Category</label>
+    <kendo-dropdownlist
+      name="category"
+      [data]="productService.categories"
+      [(ngModel)]="product.category"
+      required
+      #category="ngModel"
+    ></kendo-dropdownlist>
+    @if (category.invalid && category.touched) {
+      <small class="error">Please choose a category</small>
+    }
+  </div>
+
+  <button
+    kendoButton
+    themeColor="primary"
+    type="submit"
+    [disabled]="productForm.invalid || product.price <= 0"
+  >
+    Save
+  </button>
+  <button kendoButton type="button" routerLink="/products">Cancel</button>
+</form>

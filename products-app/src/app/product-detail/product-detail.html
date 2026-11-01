@@ -1,8 +1,14 @@
 <div class="card">
   <h3>{{ product().name }}</h3>
   <p><b>Category:</b> {{ product().category }}</p>
-  <p><b>Price:</b> {{ product().price | currency }}</p>
+  <p>
+    <b>Price:</b>
+    <span [ngClass]="{ expensive: product().price > 1000, cheap: product().price < 50 }">
+      {{ product().price | currency }}
+    </span>
+  </p>
   <p><b>Created:</b> {{ product().createdAt | date: 'medium' }}</p>
 
-  <button class="delete-btn" (click)="delete.emit(product())">Delete</button>
+  <button kendoButton (click)="edit.emit(product())">Edit</button>
+  <button kendoButton themeColor="error" (click)="delete.emit(product())">Delete</button>
 </div>

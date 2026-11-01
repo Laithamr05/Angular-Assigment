@@ -1,15 +1,14 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.top-bar h2 {
+  margin: 0;
 }
 
-th {
-  background-color: #f2f2f2;
+kendo-grid .k-button {
+  margin-right: 5px;
 }

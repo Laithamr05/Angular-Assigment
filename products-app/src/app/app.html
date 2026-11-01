@@ -2,7 +2,14 @@
   <h1>Products App</h1>
   <nav>
     <a routerLink="/products">Products</a>
+    <a routerLink="/products/add">Add Product</a>
   </nav>
+
+  @if (authService.isLoggedIn()) {
+    <button kendoButton (click)="authService.logout()">Logout</button>
+  } @else {
+    <button kendoButton (click)="authService.login()">Login</button>
+  }
 </header>
 
 <main>
