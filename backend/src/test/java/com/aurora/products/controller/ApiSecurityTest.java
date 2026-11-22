@@ -30,8 +30,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-// Tests that reading products is public and that changing products needs a valid JWT.
-// The repositories are mocked, so no database is needed.
 @WebMvcTest({ProductController.class, AuthController.class})
 @Import({SecurityConfig.class, ProductService.class, AuthService.class})
 @TestPropertySource(properties = {
@@ -143,6 +141,15 @@ class ApiSecurityTest {
         mockMvc.perform(post("/api/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"laith\", \"password\": \"short\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addProductWithUnknownCategoryReturns400() throws Exception {
+        mockMvc.perform(post("/api/products")
+                        .header("Authorization", "Bearer " + loginAndGetToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\": \"Phone\", \"price\": 10, \"category\": \"Cars\"}"))
                 .andExpect(status().isBadRequest());
     }
 }

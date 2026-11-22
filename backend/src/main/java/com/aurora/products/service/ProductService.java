@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ProductService {
 
+    private static final List<String> CATEGORIES = List.of("Electronics", "Clothes", "Books", "Food", "Other");
+
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -28,11 +30,13 @@ public class ProductService {
     }
 
     public Product createProduct(ProductRequest request) {
+        checkCategory(request.category());
         Product product = new Product(request.name().trim(), request.price(), request.category());
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductRequest request) {
+        checkCategory(request.category());
         Product product = getProductById(id);
         product.setName(request.name().trim());
         product.setPrice(request.price());
@@ -43,5 +47,11 @@ public class ProductService {
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
         productRepository.delete(product);
+    }
+
+    private void checkCategory(String category) {
+        if (!CATEGORIES.contains(category)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid category");
+        }
     }
 }

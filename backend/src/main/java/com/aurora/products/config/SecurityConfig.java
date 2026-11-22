@@ -25,9 +25,8 @@ public class SecurityConfig {
     private final SecretKey secretKey;
 
     public SecurityConfig(@Value("${app.jwt.secret}") String secret) {
-        // HS256 needs a key of at least 256 bits (32 characters)
         if (secret.length() < 32) {
-            throw new IllegalStateException("JWT_SECRET must be at least 32 characters");
+            throw new IllegalStateException("JWT must be 32 chars");
         }
         this.secretKey = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
     }
@@ -35,13 +34,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF is not needed because we use a token in the header, not cookies
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
-                        // without this, errors like 400 or 404 come back as 401
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));

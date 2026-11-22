@@ -38,7 +38,6 @@ export class ProductList implements OnInit {
     this.categoryOptions = ['All', ...this.productService.categories];
   }
 
-  // Load the products from the backend every time the list page opens
   ngOnInit() {
     this.productService.loadProducts();
   }

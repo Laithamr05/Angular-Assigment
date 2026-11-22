@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// The table is called "users" because "user" is a reserved word in PostgreSQL
 @Entity
 @Table(name = "users")
 public class User {
@@ -19,7 +18,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    // We never save the real password, only the BCrypt hash
     @Column(nullable = false)
     private String passwordHash;
 
