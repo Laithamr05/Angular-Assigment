@@ -36,13 +36,8 @@ export class ProductForm {
       return;
     }
 
-    this.productService.addProduct({
-      id: 0,
-      name: this.product.name,
-      price: this.product.price,
-      category: this.product.category,
-      createdAt: '',
-    });
-    this.router.navigate(['/products']);
+    this.productService
+      .addProduct(this.product)
+      .subscribe(() => this.router.navigate(['/products']));
   }
 }

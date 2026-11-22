@@ -24,3 +24,17 @@ nav a {
 main {
   padding: 20px;
 }
+
+.login {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login kendo-textbox {
+  width: 140px;
+}
+
+.login-error {
+  color: #ffb4b4;
+}

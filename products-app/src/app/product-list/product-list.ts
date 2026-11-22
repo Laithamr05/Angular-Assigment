@@ -38,30 +38,9 @@ export class ProductList implements OnInit {
     this.categoryOptions = ['All', ...this.productService.categories];
   }
 
+  // Load the products from the backend every time the list page opens
   ngOnInit() {
-    if (this.productService.products().length === 0) {
-      this.productService.addProduct({
-        id: 0,
-        name: 'Laptop',
-        price: 1500,
-        category: 'Electronics',
-        createdAt: '',
-      });
-      this.productService.addProduct({
-        id: 0,
-        name: 'T-Shirt',
-        price: 20,
-        category: 'Clothes',
-        createdAt: '',
-      });
-      this.productService.addProduct({
-        id: 0,
-        name: 'Angular Book',
-        price: 45,
-        category: 'Books',
-        createdAt: '',
-      });
-    }
+    this.productService.loadProducts();
   }
 
   onEdit(product: Product) {
@@ -70,8 +49,7 @@ export class ProductList implements OnInit {
 
   onDelete(product: Product) {
     if (confirm('Are you sure you want to delete ' + product.name + '?')) {
-      this.productService.deleteProduct(product.id);
-      this.selectedProduct.set(null);
+      this.productService.deleteProduct(product.id).subscribe(() => this.selectedProduct.set(null));
     }
   }
 }

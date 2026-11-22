@@ -8,6 +8,6 @@ export const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' },
   { path: 'products', component: ProductList },
   { path: 'products/add', component: ProductForm, canActivate: [authGuard] },
-  { path: 'products/:id', component: ProductEdit },
+  { path: 'products/:id', component: ProductEdit, canActivate: [authGuard] },
   { path: '**', redirectTo: 'products' },
 ];

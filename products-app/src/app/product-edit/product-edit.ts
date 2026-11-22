@@ -37,18 +37,19 @@ export class ProductEdit implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.product = this.productService.getProduct(id);
-
-    if (!this.product) {
-      alert('Product not found');
-      this.router.navigate(['/products']);
-      return;
-    }
-
-    this.productForm.patchValue({
-      name: this.product.name,
-      price: this.product.price,
-      category: this.product.category,
+    this.productService.getProduct(id).subscribe({
+      next: (product) => {
+        this.product = product;
+        this.productForm.patchValue({
+          name: product.name,
+          price: product.price,
+          category: product.category,
+        });
+      },
+      error: () => {
+        alert('Product not found');
+        this.router.navigate(['/products']);
+      },
     });
   }
 
@@ -59,12 +60,13 @@ export class ProductEdit implements OnInit {
     }
 
     const values = this.productForm.value;
-    this.productService.updateProduct({
-      ...this.product,
-      name: values.name!,
-      price: values.price!,
-      category: values.category!,
-    });
-    this.router.navigate(['/products']);
+    this.productService
+      .updateProduct({
+        ...this.product,
+        name: values.name!,
+        price: values.price!,
+        category: values.category!,
+      })
+      .subscribe(() => this.router.navigate(['/products']));
   }
 }

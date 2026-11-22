@@ -1,0 +1,24 @@
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
+
+// Adds the JWT to every request. If the backend says 401 (token missing or expired), log out.
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.token();
+
+  if (token) {
+    req = req.clone({ setHeaders: { Authorization: 'Bearer ' + token } });
+  }
+
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401 && !req.url.includes('/api/auth/')) {
+        authService.logout();
+        alert('You need to login first');
+      }
+      return throwError(() => error);
+    }),
+  );
+};

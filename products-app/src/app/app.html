@@ -8,7 +8,28 @@
   @if (authService.isLoggedIn()) {
     <button kendoButton (click)="authService.logout()">Logout</button>
   } @else {
-    <button kendoButton (click)="authService.login()">Login</button>
+    <form class="login" (ngSubmit)="login()">
+      <kendo-textbox
+        name="username"
+        placeholder="Username"
+        [(ngModel)]="username"
+        aria-label="Username"
+      ></kendo-textbox>
+      <kendo-textbox
+        name="password"
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        aria-label="Password"
+      ></kendo-textbox>
+      <button kendoButton type="submit" [disabled]="!username || !password">Login</button>
+      <button kendoButton type="button" (click)="signup()" [disabled]="!username || !password">
+        Sign up
+      </button>
+      @if (errorMessage) {
+        <small class="login-error" role="alert">{{ errorMessage }}</small>
+      }
+    </form>
   }
 </header>
 

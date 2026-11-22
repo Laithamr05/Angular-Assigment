@@ -10,6 +10,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  alert('You need to login first to add products');
+  alert('You need to login first to add or edit products');
   return router.createUrlTree(['/products']);
 };
